@@ -10,7 +10,6 @@ description: >
   HOT to deploy nested-openstack-kubernetes stack with Contrail networking
 
 parameters:
-
   public_network_fqdn:
     type: string
     description: FQDN of the public network
@@ -44,7 +43,6 @@ parameters:
     description: Flavor type of the instance
 
 resources:
-
   template_VirtualMachineInterface_Master:
     type: OS::ContrailV2::VirtualMachineInterface
     properties:
@@ -83,14 +81,7 @@ resources:
       networks:
         - port: { get_resource: template_VirtualMachineInterface_Master }
       user_data:
-        str_replace:
-          template: { get_file: scripts/init.sh }
-          params:
-            $master_ip: { get_param: master_ip_address }
-            $slave_ip: { get_param: slave_ip_address }
-            $master_hostname: { get_param: master_instance_name }
-            $slave_hostname: { get_param: slave_instance_name }
-            $root_password: { get_param: root_password }
+        get_resource: template_MasterInit
       user_data_format: RAW
 
   template_Instance_Slave:
@@ -103,21 +94,28 @@ resources:
       networks:
         - port: { get_resource: template_VirtualMachineInterface_Slave }
       user_data:
-        get_resource: template_BootStrap
+        get_resource: template_SlaveInit
       user_data_format: RAW
 
-  template_BootStrap:
-    type: OS::Heat::MultipartMime
-    properties:
-      parts:
-      - config: { get_resource: template_CloudInit }
-
-  template_CloudInit:
+  template_MasterInit:
     type: OS::Heat::SoftwareConfig
     properties:
       config:
         str_replace:
-          template: { get_file: ../../cloud-init/init.sh }
+          template: { get_file: ../../cloud-init/scripts/master.sh }
+          params:
+            $master_ip: { get_param: master_ip_address }
+            $slave_ip: { get_param: slave_ip_address }
+            $master_hostname: { get_param: master_instance_name }
+            $slave_hostname: { get_param: slave_instance_name }
+            $root_password: { get_param: root_password }
+
+  template_SlaveInit:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config:
+        str_replace:
+          template: { get_file: ../../cloud-init/scripts/slave.sh }
           params:
             $master_ip: { get_param: master_ip_address }
             $slave_ip: { get_param: slave_ip_address }
@@ -126,7 +124,6 @@ resources:
             $root_password: { get_param: root_password }
 
 outputs:
-
   master_instance_ip:
     description: Public IP of master instance
     value: { get_attr: [ template_Instance_Master, networks, { str_split: [':', { get_param: public_network_fqdn }, 2] }, 0 ] }
