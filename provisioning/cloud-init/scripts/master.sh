@@ -45,6 +45,8 @@ $master_ip
 $slave_ip
 EOF
 
+vrouter_physical_interface=$(route | grep '^default' | grep -o '[^ ]*$')
+
 cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 docker_registry: $docker_registry:5000
 docker_registry_insecure: True
@@ -56,7 +58,6 @@ contrail_compute_mode: container
 os_release: $container_os
 contrail_version: $contrail_version
 cloud_orchestrator: $container_orchestrator
-vrouter_physical_interface: eth0
 webui_config: {http_listen_port: 8085}
 keystone_config: {ip: $openstack_keystone_ip, admin_password: $openstack_admin_password, admin_user: admin, admin_tenant: admin}
 nested_cluster_private_network: "10.10.10.0/24"
@@ -65,3 +66,5 @@ nested_cluster_network: {domain: $openstack_domain, project: $openstack_project,
 nested_mode: true
 kubernetes_api_server: $master_ip
 EOF
+
+echo "vrouter_physical_interface: $(route | grep '^default' | grep -o '[^ ]*$')" >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml 
