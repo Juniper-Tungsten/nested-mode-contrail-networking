@@ -14,7 +14,6 @@ ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-master
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-slave
 
-git clone https://github.com/savithruml/nested-k8s
 wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra/contrail-ansible-4.0.0.0-20.tar.gz
 
 mkdir contrail-ansible && cd contrail-ansible
@@ -56,7 +55,7 @@ contrail_version: $contrail_version
 cloud_orchestrator: $container_orchestrator
 vrouter_physical_interface: eth0
 webui_config: {http_listen_port: 8085}
-keystone_config: {ip: $openstack_keystone_ip, admin_password: $openstack_admin_pasword, admin_user: admin, admin_tenant: admin}
+keystone_config: {ip: $openstack_keystone_ip, admin_password: $openstack_admin_password, admin_user: admin, admin_tenant: admin}
 nested_cluster_private_network: "10.10.10.0/24"
 kubernetes_cluster_name: nested-k8
 nested_cluster_network: {domain: $openstack_domain, project: $openstack_project, name: $openstack_public_network}

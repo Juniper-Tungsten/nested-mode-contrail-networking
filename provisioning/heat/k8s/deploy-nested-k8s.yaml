@@ -62,7 +62,7 @@ parameters:
     type: string
     description: IP address of the Contrail controller/config node
 
-  contrail_analyticsi_ip:
+  contrail_analytics_ip:
     type: string
     description: IP address of the Contrail analytics node
 
@@ -70,7 +70,7 @@ parameters:
     type: string
     description: IP address of the OpenStack keystone node
 
-  openstack_admin_pasword:
+  openstack_admin_password:
     type: string
     description: OpenStack keystone admin password
 
@@ -155,7 +155,7 @@ resources:
             $contrail_version: { get_param: contrail_version }
             $contrail_cfgm_ip: { get_param: contrail_cfgm_ip }
             $contrail_analyticsi_ip: { get_param: contrail_analytics_ip }
-            $openstack_keystone_ip: { get_param: keystone_ip }
+            $openstack_keystone_ip: { get_param: openstack_keystone_ip }
             $openstack_admin_pasword: { get_param: openstack_admin_password }
             $openstack_domain: { get_param: openstack_domain }
             $openstack_project: { get_param: openstack_project }
