@@ -14,13 +14,16 @@ ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-master
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-slave
 
+cd /root
 wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra/contrail-ansible-4.0.0.0-20.tar.gz
 
 mkdir contrail-ansible && cd contrail-ansible
 cp /root/contrail-ansible-4.0.0.0-20.tar.gz . && tar -xvzf contrail-ansible-4.0.0.0-20.tar.gz
 cd /root/contrail-ansible/playbooks
+> /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
+> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 
-cat << EOF > inventory/my-inventory/hosts
+cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 # Kubernetes Master-Node
 [contrail-repo]
 $master_ip
@@ -42,7 +45,7 @@ $master_ip
 $slave_ip
 EOF
 
-cat << EOF > inventory/my-inventory/group_vars/all.yml
+cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 docker_registry: $docker_registry:5000
 docker_registry_insecure: True
 docker_install_method: package
