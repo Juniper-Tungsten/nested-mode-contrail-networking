@@ -18,7 +18,7 @@ parameters:
     type: string
     description: Name of the master instance
 
-  master_ip_address:
+  master_ip:
     type: string
     description: IP address of the master instance
 
@@ -26,7 +26,7 @@ parameters:
     type: string
     description: Name of the slave instance
 
-  slave_ip_address:
+  slave_ip:
     type: string
     description: IP address of the slave instance
 
@@ -41,6 +41,46 @@ parameters:
   flavor_type:
     type: string
     description: Flavor type of the instance
+
+  docker_registry:
+    type: string
+    description: Docker registry which stores Contrail containers
+
+  container_os:
+    type: string
+    description: Container OS
+
+  container_orchestrator:
+    type: string
+    description: Container Orchestration Engine
+
+  contrail_version:
+    type: string
+    description: Contrail version
+
+  contrail_cfgm_ip:
+    type: string
+    description: IP address of the Contrail controller/config node
+
+  contrail_analyticsi_ip:
+    type: string
+    description: IP address of the Contrail analytics node
+
+  openstack_keystone_ip:
+    type: string
+    description: IP address of the OpenStack keystone node
+
+  openstack_admin_pasword:
+    type: string
+    description: OpenStack keystone admin password
+
+  openstack_domain:
+    type: string
+    description: OpenStack domain name
+
+  openstack_project:
+    type: string
+    description: OpenStack project name
 
 resources:
   template_VirtualMachineInterface_Master:
@@ -59,7 +99,7 @@ resources:
     type: OS::ContrailV2::InstanceIp
     depends_on: [ template_VirtualMachineInterface_Master ]
     properties:
-      instance_ip_address: { get_param: master_ip_address }
+      instance_ip_address: { get_param: master_ip }
       virtual_machine_interface_refs: [{ get_resource: template_VirtualMachineInterface_Master }]
       virtual_network_refs: [{ get_param: public_network_fqdn }]
 
@@ -67,7 +107,7 @@ resources:
     type: OS::ContrailV2::InstanceIp
     depends_on: [ template_VirtualMachineInterface_Slave ]
     properties:
-      instance_ip_address: { get_param: slave_ip_address }
+      instance_ip_address: { get_param: slave_ip }
       virtual_machine_interface_refs: [{ get_resource: template_VirtualMachineInterface_Slave }]
       virtual_network_refs: [{ get_param: public_network_fqdn }]
 
@@ -104,11 +144,22 @@ resources:
         str_replace:
           template: { get_file: ../../cloud-init/scripts/master.sh }
           params:
-            $master_ip: { get_param: master_ip_address }
-            $slave_ip: { get_param: slave_ip_address }
+            $master_ip: { get_param: master_ip }
+            $slave_ip: { get_param: slave_ip }
             $master_hostname: { get_param: master_instance_name }
             $slave_hostname: { get_param: slave_instance_name }
             $root_password: { get_param: root_password }
+            $docker_registry: { get_param: docker_registry }
+            $container_os: { get_param: container_os }
+            $container_orchestrator: { get_param: container_orchestrator }
+            $contrail_version: { get_param: contrail_version }
+            $contrail_cfgm_ip: { get_param: contrail_cfgm_ip }
+            $contrail_analyticsi_ip: { get_param: contrail_analytics_ip }
+            $openstack_keystone_ip: { get_param: keystone_ip }
+            $openstack_admin_pasword: { get_param: openstack_admin_password }
+            $openstack_domain: { get_param: openstack_domain }
+            $openstack_project: { get_param: openstack_project }
+            $openstack_public_network: { str_split: [':', { get_param: public_network_fqdn }, 2] }
 
   template_SlaveInit:
     type: OS::Heat::SoftwareConfig
@@ -117,8 +168,8 @@ resources:
         str_replace:
           template: { get_file: ../../cloud-init/scripts/slave.sh }
           params:
-            $master_ip: { get_param: master_ip_address }
-            $slave_ip: { get_param: slave_ip_address }
+            $master_ip: { get_param: master_ip }
+            $slave_ip: { get_param: slave_ip }
             $master_hostname: { get_param: master_instance_name }
             $slave_hostname: { get_param: slave_instance_name }
             $root_password: { get_param: root_password }

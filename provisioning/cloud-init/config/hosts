@@ -1,19 +1,19 @@
 # Kubernetes Master-Node
 [contrail-repo]
-10.84.53.3
+{{ master_ip }}
 
 # Contrail-Cloud Controller
 [kubernetes-contrail-controllers]
-10.87.64.151
+{{ contrail_cfgm_ip }}
 
 # Contrail-Cloud Analytics
 [kubernetes-contrail-analytics]
-10.87.64.151
+{{ contrail_analytics_ip }}
 
 # Kubernetes Master-Node
 [contrail-kubernetes]
-10.84.53.3
+{{ master_ip }}
 
 # Kubernetes Slave-Node
 [contrail-compute]
-10.84.53.4
+{{ slave_ip }}
