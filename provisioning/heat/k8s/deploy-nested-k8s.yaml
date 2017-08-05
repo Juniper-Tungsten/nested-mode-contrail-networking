@@ -1,7 +1,13 @@
+# NESTED OPENSTACK/KUBERNETES
+
+# Author: SAVITHRU LOKANATH
+# Contact: SAVITHRU AT JUNIPER.NET
+# Copyright (c) 2017 Juniper Networks, Inc. All rights reserved
+
 heat_template_version: 2015-10-15
 
 description: >
-  HOT to deploy nested-contrail-kubernetes stack
+  HOT to deploy nested-openstack-kubernetes stack with Contrail networking
 
 parameters:
 
@@ -9,21 +15,33 @@ parameters:
     type: string
     description: FQDN of the public network
 
+  master_instance_name:
+    type: string
+    description: Name of the master instance
+
+  master_ip_address:
+    type: string
+    description: IP address of the master instance
+
+  slave_instance_name:
+    type: string
+    description: Name of the slave instance
+
+  slave_ip_address:
+    type: string
+    description: IP address of the slave instance
+
+  root_password:
+    type: string
+    description: Root password for the master/slave instances
+
   image_name:
     type: string
     description: Name of the image
 
   flavor_type:
     type: string
-    description: Flavor type of the instance 
-
-  master_instance_name:
-    type: string
-    description: Name of the master instance
-
-  slave_instance_name:
-    type: string
-    description: Name of the slave instance
+    description: Flavor type of the instance
 
 resources:
 
@@ -43,6 +61,7 @@ resources:
     type: OS::ContrailV2::InstanceIp
     depends_on: [ template_VirtualMachineInterface_Master ]
     properties:
+      instance_ip_address: { get_param: master_ip_address }
       virtual_machine_interface_refs: [{ get_resource: template_VirtualMachineInterface_Master }]
       virtual_network_refs: [{ get_param: public_network_fqdn }]
 
@@ -50,6 +69,7 @@ resources:
     type: OS::ContrailV2::InstanceIp
     depends_on: [ template_VirtualMachineInterface_Slave ]
     properties:
+      instance_ip_address: { get_param: slave_ip_address }
       virtual_machine_interface_refs: [{ get_resource: template_VirtualMachineInterface_Slave }]
       virtual_network_refs: [{ get_param: public_network_fqdn }]
 
@@ -63,7 +83,14 @@ resources:
       networks:
         - port: { get_resource: template_VirtualMachineInterface_Master }
       user_data:
-        get_resource: template_BootStrap
+        str_replace:
+          template: { get_file: scripts/init.sh }
+          params:
+            $master_ip: { get_param: master_ip_address }
+            $slave_ip: { get_param: slave_ip_address }
+            $master_hostname: { get_param: master_instance_name }
+            $slave_hostname: { get_param: slave_instance_name }
+            $root_password: { get_param: root_password }
       user_data_format: RAW
 
   template_Instance_Slave:
@@ -88,17 +115,21 @@ resources:
   template_CloudInit:
     type: OS::Heat::SoftwareConfig
     properties:
-      config: |
-        #!/bin/sh
-        yum install epel-release vim NetworkManager -y
-        systemctl start NetworkManager && sudo systemctl enable NetworkManager
-        yum update -y
+      config:
+        str_replace:
+          template: { get_file: ../../cloud-init/init.sh }
+          params:
+            $master_ip: { get_param: master_ip_address }
+            $slave_ip: { get_param: slave_ip_address }
+            $master_hostname: { get_param: master_instance_name }
+            $slave_hostname: { get_param: slave_instance_name }
+            $root_password: { get_param: root_password }
 
 outputs:
 
   master_instance_ip:
     description: Public IP of master instance
-    value: { get_attr: [ template_Instance_Slave, networks, { str_split: [':', { get_param: public_network_fqdn }, 2] }, 0 ] }
+    value: { get_attr: [ template_Instance_Master, networks, { str_split: [':', { get_param: public_network_fqdn }, 2] }, 0 ] }
 
   slave_instance_ip:
     description: Public IP of slave instance

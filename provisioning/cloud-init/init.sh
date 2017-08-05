@@ -1,11 +1,15 @@
-# INIT SCRIPT 
+#!/bin/sh
 
-# Author: SAVITHRU LOKANATH
-# Contact: SAVITHRU AT JUNIPER.NET
-# Copyright (c) 2017 Juniper Networks, Inc. All rights reserved.
+set -eux
 
-sudo yum install epel-release vim NetworkManager -y
-sudo touch /tmp/hello-world
-sudo systemctl start NetworkManager && sudo systemctl enable NetworkManager
-#sudo yum update -y
-#sudo yum install ansible pyOpenSSL python-cryptography python-lxml git -y
+echo "root:$root_password" | chpasswd
+
+yum install epel-release -y && yum update -y
+yum install sshpass git vim NetworkManager -y >> /var/log/contrail-installer.log
+systemctl start NetworkManager && systemctl enable NetworkManager >> /var/log/contrail-installer.log
+echo "$master_ip  $master_hostname" >> /etc/hosts
+echo "$slave_ip  $slave_hostname" >> /etc/hosts
+
+ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
+sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no root@nested-master
+sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no root@nested-slave
