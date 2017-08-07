@@ -9,10 +9,12 @@ yum install ansible pyOpenSSL python-cryptography python-lxml wget git vim Netwo
 systemctl start NetworkManager && systemctl enable NetworkManager
 echo "$master_ip  $master_hostname" >> /etc/hosts
 echo "$slave_ip  $slave_hostname" >> /etc/hosts
+echo "$contrail_cfgm_ip  $contrail_node_hostname" >> /etc/hosts
 
 ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
-sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-master
-sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@nested-slave
+sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$master_hostname
+sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$slave_hostname
+sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$contrail_node_hostname
 
 cd /root
 wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra/contrail-ansible-4.0.0.0-20.tar.gz
