@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#Set SSH password, keyless SSH, stat hosts & install base packages
+
 set -eux
 
 echo "root:$root_password" | chpasswd
@@ -10,11 +12,15 @@ systemctl start NetworkManager && systemctl enable NetworkManager
 echo "$master_ip  $master_hostname" >> /etc/hosts
 echo "$slave_ip  $slave_hostname" >> /etc/hosts
 echo "$contrail_cfgm_ip  $contrail_node_hostname" >> /etc/hosts
+sed -i -e 's/Subsystem sftp \/usr\/lib\/openssh\/sftp-server/Subsystem sftp internal-sftp/g' /etc/ssh/sshd_config
+service sshd restart
 
 ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$master_hostname
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$slave_hostname
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$contrail_node_hostname
+
+#Get Contrail-Ansible
 
 cd /root
 wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra/contrail-ansible-4.0.0.0-20.tar.gz
@@ -24,6 +30,8 @@ cp /root/contrail-ansible-4.0.0.0-20.tar.gz . && tar -xvzf contrail-ansible-4.0.
 cd /root/contrail-ansible/playbooks
 > /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 > /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
+
+#Populate hosts file
 
 cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 # Kubernetes Master-Node
@@ -49,6 +57,8 @@ EOF
 
 vrouter_physical_interface=$(route | grep '^default' | grep -o '[^ ]*$')
 
+#Populate inventory file
+
 cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 docker_registry: $docker_registry:5000
 docker_registry_insecure: True
@@ -70,3 +80,23 @@ kubernetes_api_server: $master_ip
 EOF
 
 echo "vrouter_physical_interface: $(route | grep '^default' | grep -o '[^ ]*$')" >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml 
+
+#Populate k8s repo
+
+cat << 'EOF' >> /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+#Install Kubernetes
+
+setenforce 0
+yum install -y kubelet kubeadm
+systemctl enable kubelet && systemctl start kubelet
+#kubeadm init
