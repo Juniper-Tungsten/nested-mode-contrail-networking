@@ -5,15 +5,16 @@
 set -eux
 
 echo "root:$root_password" | chpasswd
+sed -i -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+service sshd restart
 
 yum install epel-release -y && yum clean expire-cache
-yum install ansible pyOpenSSL python-cryptography python-lxml wget git vim NetworkManager -y
-systemctl start NetworkManager && systemctl enable NetworkManager
+yum install ansible pyOpenSSL python-cryptography python-pip python-lxml wget git vim -y
 echo "$master_ip  $master_hostname" >> /etc/hosts
 echo "$slave_ip  $slave_hostname" >> /etc/hosts
 echo "$contrail_cfgm_ip  $contrail_node_hostname" >> /etc/hosts
-sed -i -e 's/Subsystem sftp \/usr\/lib\/openssh\/sftp-server/Subsystem sftp internal-sftp/g' /etc/ssh/sshd_config
-service sshd restart
+echo "nameserver $external_dns_server" >> /etc/resolv.conf
+pip install netaddr
 
 ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$master_hostname

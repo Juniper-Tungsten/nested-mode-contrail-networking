@@ -46,6 +46,10 @@ parameters:
     type: string
     description: Docker registry which stores Contrail containers
 
+  external_dns_server:
+    type: string
+    description: External DNS server
+
   container_os:
     type: string
     description: Container OS
@@ -154,6 +158,7 @@ resources:
             $slave_hostname: { get_param: slave_instance_name }
             $root_password: { get_param: root_password }
             $docker_registry: { get_param: docker_registry }
+            $external_dns_server: { get_param: external_dns_server }
             $container_os: { get_param: container_os }
             $container_orchestrator: { get_param: container_orchestrator }
             $contrail_version: { get_param: contrail_version }
@@ -177,9 +182,9 @@ resources:
             $slave_ip: { get_param: slave_ip }
             $master_hostname: { get_param: master_instance_name }
             $slave_hostname: { get_param: slave_instance_name }
-            contrail_node_hostname: { get_param: contrail_node_hostname }
             $root_password: { get_param: root_password }
-
+            $external_dns_server: { get_param: external_dns_server }
+            
 outputs:
   master_instance_ip:
     description: Public IP of master instance
