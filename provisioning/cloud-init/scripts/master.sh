@@ -9,12 +9,12 @@ sed -i -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' -e 's/PasswordAuthentic
 service sshd restart
 
 yum install epel-release -y && yum clean expire-cache
-yum install ansible pyOpenSSL python-cryptography python-pip python-lxml wget git vim -y
+yum install -y "@Development Tools" python2-pip openssl-devel python-devel wget git vim -y
+pip install -Iv ansible==2.2.0.0
 echo "$master_ip  $master_hostname" >> /etc/hosts
 echo "$slave_ip  $slave_hostname" >> /etc/hosts
 echo "$contrail_cfgm_ip  $contrail_node_hostname" >> /etc/hosts
 echo "nameserver $external_dns_server" >> /etc/resolv.conf
-pip install netaddr
 
 ssh-keygen -t rsa -C "" -P "" -f "/root/.ssh/id_rsa" -q
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$master_hostname
