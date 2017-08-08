@@ -104,8 +104,8 @@ yum install kubelet kubeadm -y
 systemctl enable kubelet && systemctl start kubelet
 kubeadm init --skip-preflight-checks
 
-mkdir -p $HOME/.kube
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-chown $(id -u):$(id -g) $HOME/.kube/config
+mkdir -p /root/.kube
+cp -i /etc/kubernetes/admin.conf /root/.kube/config
+chown $(id -u):$(id -g) /root/.kube/config
 
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
