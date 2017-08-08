@@ -12,7 +12,7 @@
 
 ## Getting started
 
-### Pre-requisites
+### Prerequisites
 
 * [Contrail-Cloud 4.X](https://www.juniper.net/support/downloads/?p=contrail#sw)
 
