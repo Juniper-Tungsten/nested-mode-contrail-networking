@@ -41,7 +41,7 @@
       (openstack-controller)# heat stack-list
       (openstack-controller)# heat stack-show nested-k8s
   
-  Login to ova-instances & tail on init logs for status
+  Login to nova-instances & tail on init logs for status
   
       (overcloud-nested-nodes)# tail -f /var/log/cloud-init-output.log -f /var/log/cloud-init.log -f /var/log/messages
       
