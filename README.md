@@ -6,6 +6,10 @@
 * One SDN controller to manage Container/VM/BareMetal workloads
 * Simplified install through Heat orchestration engine
 
+## Architecture
+
+![Architecture](https://github.com/savithruml/nested-mode-contrail-networking/blob/master/screenshots/nested-k8s-contrail.png)
+
 ## Getting started
 
 ### Pre-requisites
