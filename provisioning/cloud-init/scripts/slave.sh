@@ -41,10 +41,10 @@ COUNT=0
 while [  $COUNT -lt $MAX_TRIES ]; do
    kubectl get nodes | grep -w "Ready"
    if [ $? -eq 0 ];then
-      echo "Sucess installing k8s" >> /tmp/install-status
+      echo "Sucess installing k8s" > /tmp/install-status
       exit 0
    fi
    let COUNT=COUNT+1
+   sleep 2
 done
-echo "Too many non-successful tries" >> /tmp/install-status
-exit $ERR
+echo "Too many non-successful tries" > /tmp/install-status
