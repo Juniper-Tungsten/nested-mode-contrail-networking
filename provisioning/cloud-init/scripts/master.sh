@@ -117,3 +117,6 @@ token=$(kubectl describe secret -n kube-system $(kubectl get secret -n kube-syst
 # Add token & restart contrail-kube-manager
 docker exec -it contrail-kube-manager bash -c "sed -i -e 's/token =/token=${token}/g' /etc/contrail/contrail-kubernetes.conf"
 docker exec -it contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/supervisord_kubernetes.sock restart all"
+
+# Echo complete
+echo "Success!" >> /tmp/nested-status
