@@ -82,7 +82,7 @@ kubernetes_api_server: $master_ip
 EOF
 
 echo "vrouter_physical_interface: $(route | grep '^default' | grep -o '[^ ]*$')" >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml 
-ansible-playbook -i inventory/my-inventory site.yml
+cd /root/contrail-ansible/playbooks && ansible-playbook -i inventory/my-inventory site.yml
 
 #Populate k8s repo
 
