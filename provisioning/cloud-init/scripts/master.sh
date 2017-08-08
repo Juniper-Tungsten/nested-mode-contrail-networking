@@ -105,7 +105,8 @@ ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{get
 echo "lolla-1" >> /tmp/install
 sleep 60
 echo "lolla-2" >> /tmp/install
-kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
+echo "kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default" > /tmp/clusterbind.sh
+chmod +x /tmp/clusterbind.sh && sh /tmp/clusterbind.sh
 echo "lolla-3" >> /tmp/install
 
 # Get secret
