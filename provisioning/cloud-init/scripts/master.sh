@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#Set SSH password, keyless SSH, stat hosts & install base packages
+# Set SSH password, keyless SSH, stat hosts & install base packages
 
 set -eux
 
@@ -22,7 +22,7 @@ sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ss
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$slave_hostname
 sshpass -p "$root_password" ssh-copy-id -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub root@$contrail_node_hostname
 
-#Get Contrail-Ansible
+# Get Contrail-Ansible
 
 cd /root
 wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra/contrail-ansible-4.0.0.0-20.tar.gz
@@ -33,7 +33,7 @@ cd /root/contrail-ansible/playbooks
 > /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 > /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 
-#Populate hosts file
+# Populate hosts file
 
 cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 # Kubernetes Master-Node
@@ -57,10 +57,7 @@ $master_ip
 $slave_ip
 EOF
 
-vrouter_physical_interface=$(route | grep '^default' | grep -o '[^ ]*$')
-
-#Populate inventory file
-
+# Populate inventory file
 cat << 'EOF' >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
 docker_registry: $docker_registry:5000
 docker_registry_insecure: True
@@ -84,8 +81,7 @@ EOF
 echo "vrouter_physical_interface: $(route | grep '^default' | grep -o '[^ ]*$')" >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml 
 cd /root/contrail-ansible/playbooks && ansible-playbook -i inventory/my-inventory site.yml
 
-#Populate k8s repo
-
+# Populate k8s repo
 cat << 'EOF' >> /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -97,27 +93,42 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-#Install Kubernetes
-
+# Install Kubernetes
 setenforce 0
 yum install kubelet kubeadm -y
 systemctl enable kubelet && systemctl start kubelet
 kubeadm init --skip-preflight-checks
-
 mkdir -p /root/.kube
 cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
-
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
 sleep 5
 kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
 
 # Get secret
 token=$(kubectl describe secret -n kube-system $(kubectl get secret -n kube-system | grep default-token | cut -d " " -f1) | awk -F "token:" '{print $2}' | tr -d " \t\n\r")
+echo "${token}" >> /tmp/install
 
 # Add token & restart contrail-kube-manager
 docker exec -it contrail-kube-manager bash -c "sed -i -e 's/token =/token=${token}/g' /etc/contrail/contrail-kubernetes.conf"
 docker exec -it contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/supervisord_kubernetes.sock restart all"
+
+# Create a POD
+cat << 'EOF' >> ~/custom-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: custom-app
+  labels:
+    app: custom-app
+  annotations: {
+    "opencontrail.org/network" : '{"domain":"default-domain", "project": "admin", "name":"custom-net"}'
+  }
+spec:
+  containers:
+    - name: custom-app
+      image: ubuntu-upstart
+EOF
 
 # Echo complete
 
