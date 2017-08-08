@@ -102,8 +102,11 @@ mkdir -p /root/.kube
 cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
-sleep 5
+echo "lolla-1" >> /tmp/install
+sleep 60
+echo "lolla-2" >> /tmp/install
 kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
+echo "lolla-3" >> /tmp/install
 
 # Get secret
 token=$(kubectl describe secret -n kube-system $(kubectl get secret -n kube-system | grep default-token | cut -d " " -f1) | awk -F "token:" '{print $2}' | tr -d " \t\n\r")
