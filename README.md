@@ -16,7 +16,7 @@
 
 * [Contrail-Cloud 4.X](https://www.juniper.net/support/downloads/?p=contrail#sw)
 
-* [CentOS 7.3 Minimal with Kernel-Devel/Headers](http://10.84.5.120/cs-shared//images/centos-nested-image.img)
+* [CentOS-7.3-minimal with kernel-devel/headers](http://10.84.5.120/cs-shared//images/centos-nested-image.img)
 
 ### Install
 
