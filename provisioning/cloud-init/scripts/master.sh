@@ -9,7 +9,7 @@ sed -i -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' -e 's/PasswordAuthentic
 service sshd restart
 
 yum install epel-release -y && yum clean expire-cache
-yum install "@Development Tools" python2-pip openssl-devel python-devel wget git vim -y
+yum install "@Development Tools" python2-pip sshpass openssl-devel python-devel wget git vim -y
 pip install -Iv ansible==2.2.0.0
 echo "$master_ip  $master_hostname" >> /etc/hosts
 echo "$slave_ip  $slave_hostname" >> /etc/hosts
