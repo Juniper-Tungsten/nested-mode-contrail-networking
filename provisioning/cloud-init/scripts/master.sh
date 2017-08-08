@@ -82,6 +82,7 @@ kubernetes_api_server: $master_ip
 EOF
 
 echo "vrouter_physical_interface: $(route | grep '^default' | grep -o '[^ ]*$')" >> /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml 
+ansible-playbook -i inventory/my-inventory site.yml
 
 #Populate k8s repo
 
@@ -99,6 +100,13 @@ EOF
 #Install Kubernetes
 
 setenforce 0
-yum install -y kubelet kubeadm
+yum install kubelet kubeadm -y
 systemctl enable kubelet && systemctl start kubelet
-#kubeadm init
+kubeadm init --skip-preflight-checks
+
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " "
+ssh $slave_ip kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
