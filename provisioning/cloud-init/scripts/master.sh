@@ -109,3 +109,11 @@ cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
+kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
+
+# Get secret
+token=$(kubectl describe secret -n kube-system $(kubectl get secret -n kube-system | grep default-token | cut -d " " -f1) | awk -F "token:" '{print $2}' | tr -d " \t\n\r")
+
+# Add token & restart contrail-kube-manager
+docker exec -it contrail-kube-manager bash -c "sed -i -e 's/token =/token=${token}/g' /etc/contrail/contrail-kubernetes.conf"
+docker exec -it contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/supervisord_kubernetes.sock restart all"
