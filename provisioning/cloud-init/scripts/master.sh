@@ -109,6 +109,7 @@ cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
+sleep 5
 kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
 
 # Get secret
