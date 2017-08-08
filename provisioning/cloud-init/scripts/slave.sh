@@ -32,4 +32,6 @@ EOF
 setenforce 0
 yum install -y kubelet kubeadm
 systemctl enable kubelet && systemctl start kubelet
-echo "kubeadm init" >> /tmp/kubeinit
+
+# Echo complete
+echo "Success!" >> /tmp/nested-status
