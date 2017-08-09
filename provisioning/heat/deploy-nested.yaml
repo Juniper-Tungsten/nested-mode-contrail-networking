@@ -150,7 +150,7 @@ resources:
     properties:
       config:
         str_replace:
-          template: { get_file: ../cloud-init/scripts/master.sh }
+          template: { get_file: ../cloud-init/k8s/master.sh }
           params:
             $master_ip: { get_param: master_ip }
             $slave_ip: { get_param: slave_ip }
@@ -176,7 +176,7 @@ resources:
     properties:
       config:
         str_replace:
-          template: { get_file: ../cloud-init/scripts/slave.sh }
+          template: { get_file: ../cloud-init/k8s/slave.sh }
           params:
             $master_ip: { get_param: master_ip }
             $slave_ip: { get_param: slave_ip }
