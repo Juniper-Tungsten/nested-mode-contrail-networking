@@ -49,4 +49,6 @@
   
       (overcloud-nested-nodes)# tail -f /var/log/cloud-init-output.log -f /var/log/cloud-init.log -f /var/log/messages
       
-      
+  ## Contributors
+  
+      [Savithru Lokanath](savithru@icloud.com)
