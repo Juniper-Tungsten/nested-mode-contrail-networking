@@ -31,14 +31,14 @@
 
 * Populate the environment file
 
-      (openstack-controller)# vi /root/nested-mode-contrail-networking/provisioning/heat/k8s/deploy-nested-k8s.env
+      (openstack-controller)# vi /root/nested-mode-contrail-networking/provisioning/heat/deploy-nested.env
       
   Refer to [example-file](https://github.com/savithruml/nested-mode-contrail-networking/blob/master/examples/example-nested-k8s.env)
   
 * Create the heat stack
 
-      (openstack-controller)# cd nested-mode-contrail-networking/provisioning/heat/k8s
-      (openstack-controller)# heat stack-create nested-k8s -f deploy-nested-k8s.yaml -e deploy-nested-k8s.env
+      (openstack-controller)# cd nested-mode-contrail-networking/provisioning/heat/
+      (openstack-controller)# heat stack-create nested -f deploy-nested.yaml -e deploy-nested.env
       
 * Monitor the status
 
