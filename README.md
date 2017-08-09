@@ -8,7 +8,7 @@
 
 ## Architecture
 
-![Architecture](screenshots/nested-k8s-contrail.png)
+![Architecture](nested-mode-contrail-networking/screenshots/nested-k8s-contrail.png)
 
 ## Getting started
 
