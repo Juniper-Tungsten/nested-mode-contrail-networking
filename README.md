@@ -51,4 +51,4 @@
       
 ## Contributors
   
-* [Savithru Lokanath](savithru@icloud.com)
+* [Savithru Lokanath](https://www.linkedin.com/in/savvythrough)
