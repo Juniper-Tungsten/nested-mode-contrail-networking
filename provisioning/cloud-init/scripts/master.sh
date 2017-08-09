@@ -102,20 +102,20 @@ mkdir -p /root/.kube
 cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 ssh $slave_hostname kubeadm join --token $(kubeadm token list | awk '/TOKEN/{getline; print}' | cut -d " " -f1 | tr -d " ") $master_ip:6443 --skip-preflight-checks
-echo "lolla-1" >> /tmp/install
-sleep 60
-echo "lolla-2" >> /tmp/install
-echo "kubectl create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default" > /tmp/clusterbind.sh
-chmod +x /tmp/clusterbind.sh && sh /tmp/clusterbind.sh
-echo "lolla-3" >> /tmp/install
+kubectl --kubeconfig=/etc/kubernetes/admin.conf get clusterrolebinding >> /tmp/install
+kubectl --kubeconfig=/etc/kubernetes/admin.conf create clusterrolebinding contrail-manager --clusterrole=cluster-admin --serviceaccount=kube-system:default
 
 # Get secret
-token=$(kubectl describe secret -n kube-system $(kubectl get secret -n kube-system | grep default-token | cut -d " " -f1) | awk -F "token:" '{print $2}' | tr -d " \t\n\r")
-echo "${token}" >> /tmp/install
+secret=$(kubectl --kubeconfig=/etc/kubernetes/admin.conf get secret -n kube-system | grep default-token | cut -d " " -f1)
+token=$(kubectl --kubeconfig=/etc/kubernetes/admin.conf describe secret -n kube-system $secret | awk -F "token:" '{print $2}' | tr -d " \t\n\r")
 
 # Add token & restart contrail-kube-manager
-docker exec -it contrail-kube-manager bash -c "sed -i -e 's/token =/token=${token}/g' /etc/contrail/contrail-kubernetes.conf"
-docker exec -it contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/supervisord_kubernetes.sock restart all"
+docker cp contrail-kube-manager:/etc/contrail/contrail-kubernetes.conf /tmp
+sed -i "s/token =/token=$token/g" /tmp/contrail-kubernetes.conf
+docker cp /tmp/contrail-kubernetes.conf contrail-kube-manager:/etc/contrail/
+docker exec -i contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/supervisord_kubernetes.sock restart all"
+
+echo "restart complete" >> /tmp/install
 
 # Create a POD
 cat << 'EOF' >> ~/custom-pod.yaml
@@ -126,7 +126,7 @@ metadata:
   labels:
     app: custom-app
   annotations: {
-    "opencontrail.org/network" : '{"domain":"default-domain", "project": "admin", "name":"custom-net"}'
+    "opencontrail.org/network" : '{"domain":"$openstack_domain", "project": "$openstack_project", "name":"$openstack_public_network"}'
   }
 spec:
   containers:
@@ -140,7 +140,7 @@ ERR=1
 MAX_TRIES=10
 COUNT=0
 while [  $COUNT -lt $MAX_TRIES ]; do
-   kubectl get nodes | grep -w "Ready"
+   kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w "Ready"
    if [ $? -eq 0 ];then
       echo "Sucess installing k8s" > /tmp/install-status
       exit 0
