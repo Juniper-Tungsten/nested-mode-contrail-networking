@@ -8,7 +8,7 @@
 
 ## Architecture
 
-![Architecture](https://github.com/savithruml/nested-mode-contrail-networking/blob/master/screenshots/nested-k8s-contrail.png)
+![Architecture](screenshots/nested-k8s-contrail.png)
 
 ## Getting started
 
