@@ -39,7 +39,7 @@ ERR=1
 MAX_TRIES=10
 COUNT=0
 while [  $COUNT -lt $MAX_TRIES ]; do
-   kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w "Ready"
+   "kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w Ready"
    if [ $? -eq 0 ];then
       echo "Sucess installing k8s" > /tmp/install-status
       exit 0

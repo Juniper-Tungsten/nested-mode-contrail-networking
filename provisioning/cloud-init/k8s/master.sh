@@ -29,6 +29,7 @@ wget http://10.84.5.120/github-build/R4.0/20/ubuntu-14-04/mitaka/artifacts_extra
 
 mkdir contrail-ansible && cd contrail-ansible
 cp /root/contrail-ansible-4.0.0.0-20.tar.gz . && tar -xvzf contrail-ansible-4.0.0.0-20.tar.gz
+rm -rf /root/contrail-ansible-4.0.0.0-20.tar.gz
 cd /root/contrail-ansible/playbooks
 > /root/contrail-ansible/playbooks/inventory/my-inventory/hosts
 > /root/contrail-ansible/playbooks/inventory/my-inventory/group_vars/all.yml
@@ -140,7 +141,7 @@ ERR=1
 MAX_TRIES=10
 COUNT=0
 while [  $COUNT -lt $MAX_TRIES ]; do
-   kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w "Ready"
+   kubectl get nodes | grep -w "Ready"
    if [ $? -eq 0 ];then
       echo "Sucess installing k8s" > /tmp/install-status
       exit 0
