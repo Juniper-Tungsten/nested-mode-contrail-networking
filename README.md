@@ -23,16 +23,14 @@
 
 ### Install
 
-#### Contrail-Cloud
+#### CONTRAIL CLOUD
 
 * Install Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
 
       (openstack-controller)# > /etc/apt/sources.list
       (openstack-controller)# dpkg –i <contrail-server-manager-installer_4.0.0.0-<build-number><sku>_all.deb>
-  
-* Populate the testbed. Refer to [example-file](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/testbed.py)
       
-* Provision cluster
+* Populate the testbed. Refer to [example-file](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/testbed.py) & provision the cluster
 
       (openstack-controller)# /opt/contrail/contrail_server_manager/provision_containers.sh -t <testbed.py path> -c <contrail-cloud-docker.tgz> --cluster-id <user-defined-cluster-name> -d <domain-name> --no-sm-webui
       
@@ -44,7 +42,7 @@
 
       (all-nodes)# contrail-status
 
-#### Nested-Kubernetes      
+#### NESTED KUBERNETES      
 
 * Download the CentOS image & upload it to glance
 
