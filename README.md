@@ -16,9 +16,35 @@
 
 * [Contrail-Cloud 4.X](https://www.juniper.net/support/downloads/?p=contrail#sw)
 
+* [Contrail-Server-Manager](https://www.juniper.net/support/downloads/?p=contrail#sw)
+
 * [CentOS-7.3-minimal with kernel-devel/headers](http://10.84.5.120/cs-shared//images/centos-nested-image.img)
 
+
 ### Install
+
+#### Contrail-Cloud
+
+* Install Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
+
+      (openstack-controller)# > /etc/apt/sources.list
+      (openstack-controller)# dpkg –i <contrail-server-manager-installer_4.0.0.0-<build-number><sku>_all.deb>
+  
+* Populate the testbed. Refer to [example-file](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/testbed.py)
+      
+* Provision cluster
+
+      (openstack-controller)# /opt/contrail/contrail_server_manager/provision_containers.sh -t <testbed.py path> -c <contrail-cloud-docker.tgz> --cluster-id <user-defined-cluster-name> -d <domain-name> --no-sm-webui
+      
+* Monitor status
+
+      (openstack-controller)# /opt/contrail/contrail_server_manager/provision_status.sh
+      
+* After provision completes, check if all services are up & running
+
+      (all-nodes)# contrail-status
+
+#### Nested-Kubernetes      
 
 * Download the CentOS image & upload it to glance
 
