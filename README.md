@@ -43,7 +43,7 @@
 * Monitor the status
 
       (openstack-controller)# heat stack-list
-      (openstack-controller)# heat stack-show nested-k8s
+      (openstack-controller)# heat stack-show nested
   
   Login to nova-instances & tail on init logs for status
   
