@@ -51,4 +51,4 @@
       
 ## Contributors
   
-* [Savithru Lokanath](https://www.linkedin.com/in/savvythrough)
+* Savithru Lokanath
