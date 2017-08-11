@@ -20,6 +20,14 @@
 
 * [CentOS-7.3-minimal with kernel-devel/headers](http://10.84.5.120/cs-shared//images/centos-nested-image.img)
 
+* TWO x86 servers
+
+      CPUs:     32 (2 threads/core)
+      RAM:      > 64 GB
+      DISK:     > 500 GB
+
+* Gateway (Juniper MX)
+
 
 ### Install
 
