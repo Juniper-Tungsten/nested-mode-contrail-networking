@@ -118,7 +118,12 @@ docker exec -i contrail-kube-manager bash -c "supervisorctl -s unix:///var/run/s
 
 echo "restart complete" >> /tmp/install
 
+# Create Dashboard service
+
+wget https://raw.githubusercontent.com/savithruml/nested-mode-contrail-networking/master/examples/k8s-dashboard.yml
+
 # Create a POD
+
 cat << 'EOF' >> ~/custom-pod.yaml
 apiVersion: v1
 kind: Pod
