@@ -5,7 +5,7 @@ metadata:
   labels:
     app: custom-app
   annotations: {
-    "opencontrail.org/network" : '{"domain":"default-domain", "project": "admin", "name":"custom-net"}'
+    "opencontrail.org/network" : '{"domain":"default-domain", "project": "admin", "name":"public"}'
   }
 spec:
   containers:
