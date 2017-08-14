@@ -76,6 +76,10 @@
 
       (openstack-controller)# heat stack-list
       (openstack-controller)# heat stack-show nested
+
+* Get the master/slave IP
+
+      (openstack-controller)# heat stack-show nested | grep "output_"
   
   Login to nova-instances & tail on init logs for status
   
