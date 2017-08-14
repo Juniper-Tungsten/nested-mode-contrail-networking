@@ -55,7 +55,7 @@
 * Download the CentOS image & upload it to glance
 
       (openstack-controller)# wget http://10.84.5.120/cs-shared//images/centos-nested-image.img
-      (openstack-controller)# glance image-create --name centos-nested-image --visibility=public --container-format ovf --disk-format qcow2 --file centos.img
+      (openstack-controller)# glance image-create --name centos-nested-image --visibility=public --container-format ovf --disk-format qcow2 --file centos-nested-image.img
       
 * Clone this [repo](https://github.com/savithruml/nested-mode-contrail-networking)
 
