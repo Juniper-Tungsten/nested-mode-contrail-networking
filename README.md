@@ -84,7 +84,11 @@
   Login to nova-instances & tail on init logs for status
   
       (overcloud-nested-nodes)# tail -f /var/log/cloud-init-output.log -f /var/log/cloud-init.log -f /var/log/messages
-      
+
+### Uninstall
+
+    <Work in progress>
+
 ## Contributors
   
 * Savithru Lokanath
