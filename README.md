@@ -90,6 +90,10 @@
   
       (overcloud-nested-nodes)# tail -f /var/log/cloud-init-output.log -f /var/log/cloud-init.log -f /var/log/messages
 
+#### NESTED OPENSHIFT
+
+            <Work in progress>
+
 ### Uninstall
 
 * Delete contrail-objects
@@ -105,8 +109,3 @@
 ## Issues/Bugs/Feature-Requests
 
 * [Raise it here](https://github.com/savithruml/nested-mode-contrail-networking/issues)
-
-
-## Contributors
-  
-* Savithru Lokanath
