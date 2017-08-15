@@ -92,11 +92,20 @@
 
 ### Uninstall
 
-    Delete contrail-objects: <Work in progress> DO IT MANUALLY FOR NOW
+* Delete contrail-objects
+            
+            <Work in progress> 
+            DO IT MANUALLY FOR NOW
     
-    Delete stack
+* Delete stack
     
-    (openstack-controller)# heat stack-delete nested -y
+      (openstack-controller)# heat stack-delete nested -y
+
+
+### Issues/Bugs/Feature-Requests
+
+* [Raise it here](https://github.com/savithruml/nested-mode-contrail-networking/issues)
+
 
 ## Contributors
   
