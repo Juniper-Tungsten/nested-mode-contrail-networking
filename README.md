@@ -90,6 +90,26 @@
   
       (overcloud-nested-nodes)# tail -f /var/log/cloud-init-output.log -f /var/log/cloud-init.log -f /var/log/messages
 
+* Once installation is complete, create Kubernetes dashboard
+
+      (overcloud-nested-master)# kubectl create -f k8s-dashboard.yml
+      
+* Open browser & navigate to http://nested-slave:9090 
+
+![browser](screenshots/k8s-dashboard.png)
+      
+* Launch a pod in the public network
+
+      (overcloud-nested-master)# kubectl create -f custom-pod.yml
+      (overcloud-nested-master)# kubectl get pods
+      
+* Once the pod is running, launch a Virtual-Machine (OpenStack Horizon) in the same public network where you launched the pod
+
+* Once the Virtual-Machine is up, ping the Virtual-Machine from the pod
+
+      (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>
+      
+
 #### NESTED OPENSHIFT
 
             <Work in progress>
