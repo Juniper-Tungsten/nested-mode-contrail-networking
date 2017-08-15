@@ -87,7 +87,11 @@
 
 ### Uninstall
 
-    <Work in progress>
+    Delete contrail-objects: <Work in progress> DO IT MANUALLY FOR NOW
+    
+    Delete stack
+    
+    (openstack-controller)# heat stack-delete nested -y
 
 ## Contributors
   
