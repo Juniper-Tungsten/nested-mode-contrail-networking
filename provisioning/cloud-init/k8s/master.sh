@@ -120,7 +120,7 @@ echo "restart complete" >> /tmp/install
 
 # Create Dashboard service
 
-wget https://raw.githubusercontent.com/savithruml/nested-mode-contrail-networking/master/examples/k8s-dashboard.yml
+wget -P /root https://raw.githubusercontent.com/savithruml/nested-mode-contrail-networking/master/examples/k8s-dashboard.yml
 
 # Create a POD
 
@@ -142,11 +142,17 @@ EOF
 
 # Echo complete
 
+sleep 20
+
+kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w "Ready" >> /tmp/nodes
+
 ERR=1
 MAX_TRIES=10
 COUNT=0
+COMMAND='kubectl get --kubeconfig=/etc/kubernetes/admin.conf nodes | grep -w "Ready"'
+
 while [  $COUNT -lt $MAX_TRIES ]; do
-   kubectl get nodes | grep -w "Ready"
+   eval $COMMAND
    if [ $? -eq 0 ];then
       echo "Sucess installing k8s" > /tmp/install-status
       exit 0
