@@ -26,8 +26,7 @@
       RAM:      > 64 GB
       DISK:     > 500 GB
 
-* Gateway (Juniper MX)
-
+* Gateway (Juniper MX) for Internet connectivity / FIP
 
 ### Install
 
@@ -49,6 +48,12 @@
 * After provision completes, check if all services are up & running
 
       (all-nodes)# contrail-status
+      
+* Create a public virtual-network & launch a virtual-machine in the VN
+
+* Verify it can talk to the outside world
+
+      (virtual-machine)# ping 8.8.8.8
 
 #### NESTED KUBERNETES      
 
