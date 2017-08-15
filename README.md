@@ -94,9 +94,9 @@
 
       (overcloud-nested-master)# kubectl create -f k8s-dashboard.yml
       
-* Open browser & navigate to http://nested-slave:9090 
+* Open browser & navigate to "nested-slave:9090"
 
-![browser](screenshots/k8s-dashboard.png)
+     ![browser](screenshots/k8s-dashboard.png)
       
 * Launch a pod in the public network
 
@@ -107,8 +107,7 @@
 
 * Once the Virtual-Machine is up, ping the Virtual-Machine from the pod
 
-      (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>
-      
+      (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>      
 
 #### NESTED OPENSHIFT
 
