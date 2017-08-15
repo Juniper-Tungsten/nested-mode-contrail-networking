@@ -32,19 +32,3 @@ EOF
 setenforce 0
 yum install -y kubelet kubeadm
 systemctl enable kubelet && systemctl start kubelet
-
-# Echo status
-
-ERR=1
-MAX_TRIES=10
-COUNT=0
-while [  $COUNT -lt $MAX_TRIES ]; do
-   "kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w Ready"
-   if [ $? -eq 0 ];then
-      echo "Sucess installing k8s" > /tmp/install-status
-      exit 0
-   fi
-   let COUNT=COUNT+1
-   sleep 2
-done
-echo "Too many non-successful tries" > /tmp/install-status

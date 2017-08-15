@@ -139,26 +139,3 @@ spec:
     - name: custom-app
       image: ubuntu-upstart
 EOF
-
-# Echo complete
-
-sleep 20
-
-kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes | grep -w "Ready" >> /tmp/nodes
-
-ERR=1
-MAX_TRIES=10
-COUNT=0
-COMMAND='kubectl get --kubeconfig=/etc/kubernetes/admin.conf nodes | grep -w "Ready"'
-
-while [  $COUNT -lt $MAX_TRIES ]; do
-   eval $COMMAND
-   if [ $? -eq 0 ];then
-      echo "Sucess installing k8s" > /tmp/install-status
-      exit 0
-   fi
-   let COUNT=COUNT+1
-   sleep 2
-done
-echo "Too many non-successful tries" > /tmp/install-status
-exit $ERR
