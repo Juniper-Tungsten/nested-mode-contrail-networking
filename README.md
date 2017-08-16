@@ -109,6 +109,10 @@
 
      ![openstack-vm-dashboard](screenshots/openstack-vm-dashboard.png)
 
+  **NOTE**: Edit _default_ security-group to allow ICMP traffic 
+
+     ![openstack-security-groups](screenshots/edit-security-groups.png)
+
 * Once the virtual-machine is up, ping the virtual-machine from the pod
 
       (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>      
