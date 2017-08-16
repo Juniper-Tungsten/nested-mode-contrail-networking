@@ -100,7 +100,7 @@
       
 * Launch a pod (container) in the public virtual-network
 
-      (overcloud-nested-master)# kubectl create -f custom-pod.yml
+      (overcloud-nested-master)# kubectl create -f custom-app.yml
       (overcloud-nested-master)# kubectl get pods
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
@@ -115,7 +115,7 @@
 
 * Once the virtual-machine is up, ping the virtual-machine from the pod
 
-      (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>      
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-IP>      
 
      ![ping-vm-from-pod](screenshots/ping-vm-from-pod.png)
 
