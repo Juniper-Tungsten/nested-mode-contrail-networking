@@ -92,7 +92,7 @@
 
 * Once installation is complete, create Kubernetes dashboard
 
-      (overcloud-nested-master)# kubectl create -f k8s-dashboard.yml
+      (overcloud-nested-master)# kubectl create -f /root/k8s-dashboard.yml
       
 * Open browser & navigate to _http://nested-slave-ip:9090_
 
@@ -100,7 +100,7 @@
       
 * Launch a pod (container) in the public virtual-network
 
-      (overcloud-nested-master)# kubectl create -f custom-app.yml
+      (overcloud-nested-master)# kubectl create -f /root/custom-app.yml
       (overcloud-nested-master)# kubectl get pods
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
