@@ -32,7 +32,7 @@
 
 #### CONTRAIL CLOUD
 
-* **Install** Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
+* Install Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
 
       (openstack-controller)# > /etc/apt/sources.list
       (openstack-controller)# dpkg –i <contrail-server-manager-installer_4.0.0.0-<build-number><sku>_all.deb>
