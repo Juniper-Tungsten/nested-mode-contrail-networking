@@ -94,7 +94,7 @@
 
       (overcloud-nested-master)# kubectl create -f k8s-dashboard.yml
       
-* Open browser & navigate to _http://nested-slave:9090_
+* Open browser & navigate to _http://nested-slave-ip:9090_
 
      ![browser](screenshots/k8s-dashboard.png)
       
@@ -105,7 +105,7 @@
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
       
-* Once the pod is running, launch a virtual-machine (OpenStack Horizon) in the public virtual-network
+* Once the pod is up, launch a virtual-machine (OpenStack Horizon) in the public virtual-network
 
      ![openstack-vm-dashboard](screenshots/openstack-vm-dashboard.png)
 
