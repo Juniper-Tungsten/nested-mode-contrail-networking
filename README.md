@@ -102,12 +102,18 @@
 
       (overcloud-nested-master)# kubectl create -f custom-pod.yml
       (overcloud-nested-master)# kubectl get pods
+
+     ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
       
 * Once the pod is running, launch a Virtual-Machine (OpenStack Horizon) in the same public network where you launched the pod
+
+     ![openstack-vm-dashboard](screenshots/openstack-vm-dashboard.png)
 
 * Once the Virtual-Machine is up, ping the Virtual-Machine from the pod
 
       (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>      
+
+     ![ping-vm-from-pod](screenshots/ping-vm-from-pod.png)
 
 #### NESTED OPENSHIFT
 
