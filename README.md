@@ -32,7 +32,7 @@
 
 #### CONTRAIL CLOUD
 
-* Install Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
+* **Install** Contrail-Cloud (Liberty/Mitaka/Newton) using Contrail-Server-Manager
 
       (openstack-controller)# > /etc/apt/sources.list
       (openstack-controller)# dpkg –i <contrail-server-manager-installer_4.0.0.0-<build-number><sku>_all.deb>
@@ -94,22 +94,22 @@
 
       (overcloud-nested-master)# kubectl create -f k8s-dashboard.yml
       
-* Open browser & navigate to "nested-slave:9090"
+* Open browser & navigate to _http://nested-slave:9090_
 
      ![browser](screenshots/k8s-dashboard.png)
       
-* Launch a pod in the public network
+* Launch a pod (container) in the public virtual-network
 
       (overcloud-nested-master)# kubectl create -f custom-pod.yml
       (overcloud-nested-master)# kubectl get pods
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
       
-* Once the pod is running, launch a Virtual-Machine (OpenStack Horizon) in the same public network where you launched the pod
+* Once the pod is running, launch a virtual-machine (OpenStack Horizon) in the public virtual-network
 
      ![openstack-vm-dashboard](screenshots/openstack-vm-dashboard.png)
 
-* Once the Virtual-Machine is up, ping the Virtual-Machine from the pod
+* Once the virtual-machine is up, ping the virtual-machine from the pod
 
       (overcloud-nested-master)# kubectl exec -it custom-pod ping <VM-IP>      
 
