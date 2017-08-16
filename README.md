@@ -26,7 +26,9 @@
       RAM:      > 64 GB
       DISK:     > 500 GB
 
-* Gateway (Juniper MX) for Internet connectivity / FIP
+* Gateway for Internet connectivity
+
+* Routable IP address block for GUI/Ingress
 
 ### Install
 
@@ -49,9 +51,9 @@
 
       (all-nodes)# contrail-status
       
-* Create a public virtual-network & launch a virtual-machine in the VN
+* Create a public virtual-network, assign the routable IP address block
 
-* Verify it can talk to the outside world
+* Launch a virtual-machine in the public VN & verify it can talk to the outside world
 
       (virtual-machine)# ping 8.8.8.8
 
