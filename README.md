@@ -152,7 +152,7 @@
   
      ![red-network-vm](screenshots/red-network-vm.png)
      
-  Launch a pod from the master node in the newly created virtual-network. Note that we change the annotation
+  Launch a pod in the newly created virtual-network
   
       (overcloud-nested-master)# cp /root/custom-app.yml /root/custom-app-red.yml
       (overcloud-nested-master)# sed -i -e 's/public/red-network/g' -e 's/custom-app/custom-app-red/g' /root/custom-app-red.yml
