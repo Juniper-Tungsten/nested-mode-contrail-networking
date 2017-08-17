@@ -108,6 +108,10 @@
 
       (overcloud-nested-master)# kubectl create -f /root/k8s-dashboard.yml
       
+  Wait till the dashboard pod comes up
+  
+      (overcloud-nested-master)# kubectl get pods -o wide --all-namespaces | grep -i "dashboard"
+      
 * Open browser & navigate to _http://nested-slave-ip:9090_
 
      ![browser](screenshots/k8s-dashboard.png)
