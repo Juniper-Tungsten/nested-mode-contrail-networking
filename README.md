@@ -51,8 +51,14 @@
 
       (all-nodes)# contrail-status
       
-* Create a public virtual-network, assign the routable IP address block
+* From the Contrail Web-UI, create a BGP router object & associate it with the controller
 
+      ![BGP-Router](screenshots/bgp-router.png)
+      
+* Create a public virtual-network & assign the routable IP address block
+
+      ![Public-VN](screenshots/public-vn.png)
+      
 * Launch a virtual-machine in the public VN & verify it can talk to the outside world
 
       (virtual-machine)# ping 8.8.8.8
