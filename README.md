@@ -138,7 +138,7 @@
 
 * Once the virtual-machine is up, ping the virtual-machine from the pod
 
-      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-IP>
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-In-Public-Network>
       
   The ping will go through, since the virtual-machine & the pod are a part of the same virtual-network
 
@@ -157,6 +157,11 @@
       (overcloud-nested-master)# cp /root/custom-app.yml /root/custom-app-red.yml
       (overcloud-nested-master)# sed -i -e 's/public/red-network/g' -e 's/custom-app/custom-app-red/g' /root/custom-app-red.yml
       (overcloud-nested-master)# kubectl create -f /root/custom-app-red.yml
+      
+  Wait till the "custom-app-red" pod comes up
+  
+      (overcloud-nested-master)# kubectl get pods -o wide
+      (overcloud-nested-master)# kubectl describe pod custom-app-red
   
      ![red-network-pod](screenshots/red-network-pod.png)
      
@@ -165,6 +170,10 @@
      ![red-to-public](screenshots/red-to-public.png)
      
 * Verify that the ping goes through between the **_public_** & **_red-network_** workloads (Pods/VMs/Baremetals)
+
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <Pod-In-Red-Network>
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-In-Red-Network>
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-In-Public-Network>
 
      ![ping-all](screenshots/ping-all.png)
 
