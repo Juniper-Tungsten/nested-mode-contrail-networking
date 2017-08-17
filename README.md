@@ -144,7 +144,7 @@
 
      ![ping-vm-from-pod](screenshots/ping-vm-from-pod.png)
 
-* Now create a new virtual-network, give it a user-defined name (Eg. red-network) & a subnet
+* Now create a new virtual-network, give it a user-defined name (_Eg. red-network_) & a subnet
 
      ![red-network](screenshots/red-network.png)
      
