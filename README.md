@@ -109,11 +109,11 @@
 
       (overcloud-nested-master)# kubectl create -f /root/k8s-dashboard.yml
       
-  Wait till the dashboard pod comes up
+  Wait till the **_k8s-dashboard_** pod comes up
   
       (overcloud-nested-master)# kubectl get pods -o wide --all-namespaces | grep -i "dashboard"
       
-* Open browser & navigate to _http://nested-slave-ip:9090_
+* Open browser & navigate to **_http://nested-slave-ip:9090_**
 
      ![browser](screenshots/k8s-dashboard.png)
       
@@ -132,7 +132,7 @@
 
      ![openstack-vm-dashboard](screenshots/openstack-vm-dashboard.png)
 
-  **NOTE**: Edit _default_ security-group to allow ICMP traffic 
+  **NOTE**: Edit **_default_** security-group to allow ICMP traffic 
 
      ![openstack-security-groups](screenshots/edit-security-groups.png)
 
