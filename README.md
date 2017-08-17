@@ -120,7 +120,11 @@
 * Launch a pod (container) in the public virtual-network
 
       (overcloud-nested-master)# kubectl create -f /root/custom-app.yml
-      (overcloud-nested-master)# kubectl get pods
+      
+  Wait till the "custom-app" pod comes up
+  
+      (overcloud-nested-master)# kubectl get pods -o wide
+      (overcloud-nested-master)# kubectl describe pod custom-app
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
       
