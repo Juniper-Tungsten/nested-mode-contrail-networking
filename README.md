@@ -39,9 +39,15 @@
       (openstack-controller)# > /etc/apt/sources.list
       (openstack-controller)# dpkg –i <contrail-server-manager-installer_4.0.0.0-<build-number><sku>_all.deb>
       
-* Populate the testbed. Refer to [example-file](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/testbed.py) & provision the cluster
+* Populate the testbed/JSON
+
+     Refer to [example-testbed](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/testbed.py) if using Contrail 4.0.X & provision the cluster
 
       (openstack-controller)# /opt/contrail/contrail_server_manager/provision_containers.sh -t <testbed.py path> -c <contrail-cloud-docker.tgz> --cluster-id <user-defined-cluster-name> -d <domain-name> --no-sm-webui
+      
+     Refer to [example-jsons](https://github.com/savithruml/nested-mode-contrail-networking/tree/master/examples/jsons) if using Contrail 4.1.X & provision the cluster
+     
+      (openstack-controller)# /opt/contrail/contrail_server_manager/provision_containers.sh -cj <cluster.json path> -sj <server.json path> -ij <image.json path>
       
 * Monitor status
 
