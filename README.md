@@ -68,6 +68,7 @@
 * Launch a virtual-machine in the public VN & verify it can talk to the outside world
 
       (virtual-machine)# ping 8.8.8.8
+      (virtual-machine)# ping google.com
 
 #### NESTED KUBERNETES      
 
@@ -108,6 +109,10 @@
 
       (overcloud-nested-master)# kubectl create -f /root/k8s-dashboard.yml
       
+  Wait till the dashboard pod comes up
+  
+      (overcloud-nested-master)# kubectl get pods -o wide --all-namespaces | grep -i "dashboard"
+      
 * Open browser & navigate to _http://nested-slave-ip:9090_
 
      ![browser](screenshots/k8s-dashboard.png)
@@ -115,7 +120,11 @@
 * Launch a pod (container) in the public virtual-network
 
       (overcloud-nested-master)# kubectl create -f /root/custom-app.yml
-      (overcloud-nested-master)# kubectl get pods
+      
+  Wait till the "custom-app" pod comes up
+  
+      (overcloud-nested-master)# kubectl get pods -o wide
+      (overcloud-nested-master)# kubectl describe pod custom-app
 
      ![k8s-pod-dashboard](screenshots/k8s-pod-dashboard.png)
       
@@ -129,9 +138,35 @@
 
 * Once the virtual-machine is up, ping the virtual-machine from the pod
 
-      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-IP>      
+      (overcloud-nested-master)# kubectl exec -it custom-app ping <VM-IP>
+      
+  The ping will go through, since the virtual-machine & the pod are a part of the same virtual-network
 
      ![ping-vm-from-pod](screenshots/ping-vm-from-pod.png)
+
+* Now create a new virtual-network, give it a user-defined name (Eg. red-network) & a subnet
+
+     ![red-network](screenshots/red-network.png)
+     
+  Launch a virtual-machine from the OpenStack Horizon dashboard in the newly created virtual-network
+  
+     ![red-network-vm](screenshots/red-network-vm.png)
+     
+  Launch a pod from the master node in the newly created virtual-network. Note that we change the annotation
+  
+      (overcloud-nested-master)# cp /root/custom-app.yml /root/custom-app-red.yml
+      (overcloud-nested-master)# sed -i -e 's/public/red-network/g' -e 's/custom-app/custom-app-red/g' /root/custom-app-red.yml
+      (overcloud-nested-master)# kubectl create -f /root/custom-app-red.yml
+  
+     ![red-network-pod](screenshots/red-network-pod.png)
+     
+* Create a network policy to allow traffic between **_public_** & the newly created **_red-network_**
+
+     ![red-to-public](screenshots/red-to-public.png)
+     
+* Verify that the ping goes through between the **_public_** & **_red-network_** workloads (Pods/VMs/Baremetals)
+
+     ![ping-all](screenshots/ping-all.png)
 
 #### NESTED OPENSHIFT
 
