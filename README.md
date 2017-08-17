@@ -68,6 +68,7 @@
 * Launch a virtual-machine in the public VN & verify it can talk to the outside world
 
       (virtual-machine)# ping 8.8.8.8
+      (virtual-machine)# ping google.com
 
 #### NESTED KUBERNETES      
 
