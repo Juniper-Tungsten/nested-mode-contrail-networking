@@ -121,7 +121,7 @@
 
       (overcloud-nested-master)# kubectl create -f /root/custom-app.yml
       
-  Wait till the "custom-app" pod comes up
+  Wait till the **_custom-app_** pod comes up
   
       (overcloud-nested-master)# kubectl get pods -o wide
       (overcloud-nested-master)# kubectl describe pod custom-app
@@ -158,7 +158,7 @@
       (overcloud-nested-master)# sed -i -e 's/public/red-network/g' -e 's/custom-app/custom-app-red/g' /root/custom-app-red.yml
       (overcloud-nested-master)# kubectl create -f /root/custom-app-red.yml
       
-  Wait till the "custom-app-red" pod comes up
+  Wait till the **_custom-app-red_** pod comes up
   
       (overcloud-nested-master)# kubectl get pods -o wide
       (overcloud-nested-master)# kubectl describe pod custom-app-red
